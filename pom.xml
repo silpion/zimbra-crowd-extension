@@ -1,0 +1,123 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <prerequisites>
+        <maven>3.0.4</maven>
+    </prerequisites>
+
+    <groupId>de.silpion.zimbra.extension.crowd</groupId>
+    <artifactId>zimbra-crowd-extension</artifactId>
+    <packaging>jar</packaging>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <name>Zimbra Crowd Auth Extension</name>
+    <description></description>
+    <inceptionYear>2018</inceptionYear>
+
+    <organization>
+        <name>Silpion IT-Solutions GmbH</name>
+        <url>https://www.silpion.de</url>
+    </organization>
+
+    <properties>
+        <crowd.version>3.2.1</crowd.version>
+        <zimbra.version>8.7.11</zimbra.version>
+
+        <zimbra.lib.dir>${basedir}/lib</zimbra.lib.dir>
+
+        <manifest.packageName>${project.groupId}</manifest.packageName>
+        <manifest.zimbraExtensionClass>${manifest.packageName}.CrowdExtension</manifest.zimbraExtensionClass>
+
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.zimbra.cs</groupId>
+            <artifactId>zimbra-store</artifactId>
+            <version>${zimbra.version}</version>
+            <scope>system</scope>
+            <systemPath>${zimbra.lib.dir}/zimbrastore.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.zimbra.cs</groupId>
+            <artifactId>zimbra-common</artifactId>
+            <version>${zimbra.version}</version>
+            <scope>system</scope>
+            <systemPath>${zimbra.lib.dir}/zimbracommon.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.zimbra.cs</groupId>
+            <artifactId>zimbra-client</artifactId>
+            <version>${zimbra.version}</version>
+            <scope>system</scope>
+            <systemPath>${zimbra.lib.dir}/zimbraclient.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.atlassian.crowd</groupId>
+            <artifactId>crowd-integration-client-rest</artifactId>
+            <version>${crowd.version}</version>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>atlassian</id>
+            <name>Atlassian Public Repository</name>
+            <url>https://m2proxy.atlassian.com/repository/public</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <packageName>${manifest.packageName}</packageName>
+                        </manifest>
+                        <manifestEntries>
+                            <Zimbra-Extension-Class>${manifest.zimbraExtensionClass}</Zimbra-Extension-Class>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.1</version>
+                <configuration>
+                    <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                    <includeScope>runtime</includeScope>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

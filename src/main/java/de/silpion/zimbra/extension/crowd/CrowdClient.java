@@ -1,0 +1,70 @@
+package de.silpion.zimbra.extension.crowd;
+
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+
+import com.atlassian.crowd.integration.rest.service.RestCrowdClient;
+import com.atlassian.crowd.integration.rest.service.factory.RestCrowdClientFactory;
+
+import com.zimbra.common.localconfig.LC;
+import com.zimbra.common.util.StringUtil;
+import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.cs.account.Account;
+import com.zimbra.cs.account.Domain;
+import com.zimbra.cs.account.Provisioning;
+
+public class CrowdClient {
+    private static final String LC_KEY_CROWD_URL = "crowd_url";
+    private static final String LC_KEY_CROWD_APPLICATION_NAME = "crowd_app_name";
+    private static final String LC_KEY_CROWD_APPLICATION_PASSWORD = "crowd_app_password";
+    
+    private static final RestCrowdClientFactory FACTORY = new RestCrowdClientFactory();
+    private static final ConcurrentHashMap<String, RestCrowdClient> CLIENTS = new ConcurrentHashMap<>();
+    
+    
+    public static RestCrowdClient getClient(Account account, List<String> args) throws Exception {
+        final Domain domain = Provisioning.getInstance().getDomain(account);
+        
+        final String key = domain.getId();
+        RestCrowdClient client = CLIENTS.computeIfAbsent(key, id -> newInstance(args));
+        try {
+            client.testConnection();
+        }
+        catch (Exception e) {
+            ZimbraLog.extensions.error("Crowd client failed connection test, shutting down");
+            CLIENTS.remove(key);
+            client.shutdown();
+            throw e;
+        }
+        return client;
+    }
+    
+    private static RestCrowdClient newInstance(List<String> args) {
+        final String url = getArg(args, 0, LC_KEY_CROWD_URL);
+        final String applicationName = getArg(args, 1, LC_KEY_CROWD_APPLICATION_NAME);
+        final String applicationPassword = getArg(args, 2, LC_KEY_CROWD_APPLICATION_PASSWORD);
+
+        ZimbraLog.extensions.info("Creating new Crowd client for application %s at URL %s", applicationName, url);
+        return (RestCrowdClient) FACTORY.newInstance(url, applicationName, applicationPassword);
+    }
+    
+    private static String getArg(List<String> args, int index, String key) {
+        String value = "";
+        
+        if (args.size() >= index) {
+            value = args.get(index);
+        }
+        if (!StringUtil.isNullOrEmpty(value)) {
+            return value;
+        }
+        
+        value = LC.get(key);
+        if (!StringUtil.isNullOrEmpty(value)) {
+            return value;
+        }
+        
+        throw new IllegalStateException("Can't create Crowd client: Missing value for " + key);
+    }
+    
+
+}
