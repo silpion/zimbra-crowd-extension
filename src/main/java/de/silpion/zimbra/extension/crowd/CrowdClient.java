@@ -14,9 +14,11 @@ import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.Provisioning;
 
 public class CrowdClient {
-    private static final String LC_KEY_CROWD_URL = "crowd_url";
-    private static final String LC_KEY_CROWD_APPLICATION_NAME = "crowd_app_name";
-    private static final String LC_KEY_CROWD_APPLICATION_PASSWORD = "crowd_app_password";
+    // These are modeled after the crowd.properties file as described at
+    // https://confluence.atlassian.com/crowd/the-crowd-properties-file-98665664.html
+    private static final String LC_KEY_CROWD_SERVER_URL = "crowd_server_url";
+    private static final String LC_KEY_CROWD_APPLICATION_NAME = "crowd_application_name";
+    private static final String LC_KEY_CROWD_APPLICATION_PASSWORD = "crowd_application_password";
     
     private static final RestCrowdClientFactory FACTORY = new RestCrowdClientFactory();
     private static final ConcurrentHashMap<String, RestCrowdClient> CLIENTS = new ConcurrentHashMap<>();
@@ -40,7 +42,7 @@ public class CrowdClient {
     }
     
     private static RestCrowdClient newInstance(List<String> args) {
-        final String url = getArg(args, 0, LC_KEY_CROWD_URL);
+        final String url = getArg(args, 0, LC_KEY_CROWD_SERVER_URL);
         final String applicationName = getArg(args, 1, LC_KEY_CROWD_APPLICATION_NAME);
         final String applicationPassword = getArg(args, 2, LC_KEY_CROWD_APPLICATION_PASSWORD);
 
