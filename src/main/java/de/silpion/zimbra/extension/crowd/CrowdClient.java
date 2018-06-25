@@ -1,5 +1,19 @@
 package de.silpion.zimbra.extension.crowd;
 
+/*-
+ * #%L
+ * Zimbra Crowd Authentication Extension
+ * %%
+ * Copyright (C) 2018 Silpion IT-Solutions GmbH
+ * %%
+ * This file contains proprietary code and must not be copied or distributed
+ * without the express permission of the copyright holder.
+ * #L%
+ */
+
+
+
+
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
