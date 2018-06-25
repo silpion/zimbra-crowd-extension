@@ -9,7 +9,7 @@
     <groupId>de.silpion.zimbra.extension.crowd</groupId>
     <artifactId>zimbra-crowd-extension</artifactId>
     <packaging>jar</packaging>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
 
     <name>Zimbra Crowd Authentication Extension</name>
     <description></description>
