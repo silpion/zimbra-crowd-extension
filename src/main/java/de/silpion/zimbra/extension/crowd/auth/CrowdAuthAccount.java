@@ -49,8 +49,8 @@ public class CrowdAuthAccount {
         if (username.isPresent()) {
             return username.get();
         }
-        
-        throw new ObjectNotFoundException("Account not found");
+
+        return account.getUid();
     }
     
     private Optional<String> getForeignPrincipal() {
