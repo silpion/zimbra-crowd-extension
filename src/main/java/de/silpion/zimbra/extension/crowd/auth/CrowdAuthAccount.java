@@ -19,7 +19,7 @@ import com.atlassian.crowd.exception.ObjectNotFoundException;
 import com.atlassian.crowd.integration.rest.service.RestCrowdClient;
 import com.atlassian.crowd.search.builder.Restriction;
 import com.atlassian.crowd.search.query.entity.restriction.constants.UserTermKeys;
-
+import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Account;
 
 public class CrowdAuthAccount {
@@ -73,10 +73,14 @@ public class CrowdAuthAccount {
         
         switch (users.size()) {
         case 0:
+            ZimbraLog.account.debug("Found no user with mail address %s in Crowd directory", address);
             return Optional.empty();
         case 1:
-            return Optional.of(users.get(0));
+            final String username = users.get(0);
+            ZimbraLog.account.debug("Found one user with mail address %s in Crowd directory: %s", address, username);
+            return Optional.of(username);
         default:
+            ZimbraLog.account.debug("Found more than one user with mail address %s in Crowd directory: %s", address, String.join(", ", users));
             // TODO: Use a different exception
             throw new ObjectNotFoundException("Account name not unique");    
         }
