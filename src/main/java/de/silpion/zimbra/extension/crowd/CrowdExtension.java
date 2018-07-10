@@ -30,7 +30,7 @@ public class CrowdExtension implements ZimbraExtension {
     }
     
     public void init() throws ExtensionException, ServiceException {
-        ZimbraCustomAuth.register(CrowdAuthHandler.AUTH_MECH_NAME, new CrowdAuthHandler());
+        ZimbraCustomAuth.register(ID, new CrowdAuthHandler());
     }
     
     public void destroy() {

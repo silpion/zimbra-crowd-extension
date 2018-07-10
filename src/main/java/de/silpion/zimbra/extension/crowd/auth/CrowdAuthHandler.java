@@ -20,15 +20,14 @@ import java.util.Map;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.auth.ZimbraCustomAuth;
 
+import de.silpion.zimbra.extension.crowd.CrowdAccount;
 import de.silpion.zimbra.extension.crowd.CrowdClientFactory;
 import de.silpion.zimbra.extension.crowd.CrowdExtension;
 
 public class CrowdAuthHandler extends ZimbraCustomAuth {
-    public static final String AUTH_MECH_NAME = CrowdExtension.ID;
-
     @Override
     public void authenticate(Account account, String password, Map<String, Object> context, List<String> args) throws Exception {
-        new CrowdAuthAccount(CrowdClientFactory.getClient(account, args), account)
+        new CrowdAccount(CrowdClientFactory.getClient(account, args), account)
             .authenticate(password);
     }
 }

@@ -1,4 +1,4 @@
-package de.silpion.zimbra.extension.crowd.auth;
+package de.silpion.zimbra.extension.crowd;
 
 /*-
  * #%L
@@ -23,13 +23,15 @@ import com.atlassian.crowd.search.query.entity.restriction.constants.UserTermKey
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Account;
 
-public class CrowdAuthAccount {
-    private static final String AUTH_MECH_PREFIX = CrowdAuthHandler.AUTH_MECH_NAME + ":";
+import de.silpion.zimbra.extension.crowd.auth.CrowdAuthHandler;
+
+public class CrowdAccount {
+    private static final String PREFIX = CrowdExtension.ID + ":";
     
     protected final RestCrowdClient client;
     protected final Account account;
     
-    public CrowdAuthAccount(RestCrowdClient client, Account account) {
+    public CrowdAccount(RestCrowdClient client, Account account) {
         this.client = client;
         this.account = account;
     }
@@ -57,8 +59,8 @@ public class CrowdAuthAccount {
     private Optional<String> getForeignPrincipal() {
         final String[] foreignPrincipals = account.getForeignPrincipal();
         for (String principal : foreignPrincipals) {
-            if (principal.startsWith(AUTH_MECH_PREFIX)) {
-                return Optional.of(principal.substring(AUTH_MECH_PREFIX.length()));
+            if (principal.startsWith(PREFIX)) {
+                return Optional.of(principal.substring(PREFIX.length()));
             }
         }
         return Optional.empty();
