@@ -23,6 +23,11 @@ import com.zimbra.cs.account.auth.ZimbraCustomAuth;
 import de.silpion.zimbra.extension.crowd.CrowdAccount;
 
 public class CrowdAuthHandler extends ZimbraCustomAuth {
+
+    public void register(String id) {
+        ZimbraCustomAuth.register(id, this);
+    }
+
     @Override
     public void authenticate(Account account, String password, Map<String, Object> context, List<String> args) throws Exception {
         new CrowdAccount(account, args).authenticate(password);

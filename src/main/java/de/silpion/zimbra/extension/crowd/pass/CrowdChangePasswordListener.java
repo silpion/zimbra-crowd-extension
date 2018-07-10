@@ -12,7 +12,10 @@ import de.silpion.zimbra.extension.crowd.CrowdAccount;
 
 public class CrowdChangePasswordListener extends ChangePasswordListener {
 
-    
+    public void register(String id) {
+        ChangePasswordListener.register(id, this);
+    }
+
 
     @Override
     public void preModify(Account account, String password, @SuppressWarnings("rawtypes") Map context, Map<String, Object> attributes) throws ServiceException {
