@@ -23,9 +23,7 @@ import com.atlassian.crowd.integration.rest.service.factory.RestCrowdClientFacto
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
-import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Domain;
-import com.zimbra.cs.account.Provisioning;
 
 public class CrowdClientFactory {
     // These are modeled after the crowd.properties file as described at
@@ -38,9 +36,7 @@ public class CrowdClientFactory {
     private static final ConcurrentHashMap<String, RestCrowdClient> CLIENTS = new ConcurrentHashMap<>();
     
     
-    public static RestCrowdClient getClient(Account account, List<String> args) throws Exception {
-        final Domain domain = Provisioning.getInstance().getDomain(account);
-        
+    public static RestCrowdClient getClient(Domain domain, List<String> args) throws Exception {
         final String key = domain.getId();
         RestCrowdClient client = CLIENTS.computeIfAbsent(key, id -> newInstance(args));
         try {

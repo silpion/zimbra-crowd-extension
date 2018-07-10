@@ -20,22 +20,24 @@ import com.atlassian.crowd.integration.rest.service.RestCrowdClient;
 import com.atlassian.crowd.search.builder.Combine;
 import com.atlassian.crowd.search.builder.Restriction;
 import com.atlassian.crowd.search.query.entity.restriction.constants.UserTermKeys;
+
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Account;
-
-import de.silpion.zimbra.extension.crowd.auth.CrowdAuthHandler;
+import com.zimbra.cs.account.Provisioning;
 
 public class CrowdAccount {
     private static final String PREFIX = CrowdExtension.ID + ":";
     
-    protected final RestCrowdClient client;
     protected final Account account;
+    protected final RestCrowdClient client;
     
-    public CrowdAccount(RestCrowdClient client, Account account) {
-        this.client = client;
+
+    public CrowdAccount(Account account, List<String> args) throws Exception {
         this.account = account;
+        this.client = CrowdClientFactory.getClient(Provisioning.getInstance().getDomain(account), args);
     }
-    
+
+
     public void authenticate(String password) throws Exception {
         client.authenticateUser(getPrincipal(), password);
     }
