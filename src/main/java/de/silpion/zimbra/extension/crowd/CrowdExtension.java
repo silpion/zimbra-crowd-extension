@@ -15,11 +15,14 @@ package de.silpion.zimbra.extension.crowd;
 
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.auth.ZimbraCustomAuth;
+import com.zimbra.cs.account.ldap.ChangePasswordListener;
 import com.zimbra.cs.extension.ExtensionException;
 import com.zimbra.cs.extension.ZimbraExtension;
 
 import de.silpion.zimbra.extension.crowd.auth.CrowdAuthHandler;
+import de.silpion.zimbra.extension.crowd.pass.CrowdChangePasswordListener;
 
 public class CrowdExtension implements ZimbraExtension {
     // This string is used to refer to this extension
@@ -31,6 +34,9 @@ public class CrowdExtension implements ZimbraExtension {
     
     public void init() throws ExtensionException, ServiceException {
         ZimbraCustomAuth.register(ID, new CrowdAuthHandler());
+        ChangePasswordListener.register(ID, new CrowdChangePasswordListener());
+        
+        ZimbraLog.extensions.info("Crowd extension initialized");
     }
     
     public void destroy() {
