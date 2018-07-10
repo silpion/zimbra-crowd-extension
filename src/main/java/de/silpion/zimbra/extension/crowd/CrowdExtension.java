@@ -22,9 +22,11 @@ import com.zimbra.cs.extension.ZimbraExtension;
 import de.silpion.zimbra.extension.crowd.auth.CrowdAuthHandler;
 
 public class CrowdExtension implements ZimbraExtension {
-
+    // This string is used to refer to this extension
+    public static final String ID = "crowd";
+    
     public String getName() {
-        return "Crowd";
+        return ID;
     }
     
     public void init() throws ExtensionException, ServiceException {

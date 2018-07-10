@@ -21,9 +21,10 @@ import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.auth.ZimbraCustomAuth;
 
 import de.silpion.zimbra.extension.crowd.CrowdClient;
+import de.silpion.zimbra.extension.crowd.CrowdExtension;
 
 public class CrowdAuthHandler extends ZimbraCustomAuth {
-    public static final String AUTH_MECH_NAME = "crowd";
+    public static final String AUTH_MECH_NAME = CrowdExtension.ID;
 
     @Override
     public void authenticate(Account account, String password, Map<String, Object> context, List<String> args) throws Exception {
