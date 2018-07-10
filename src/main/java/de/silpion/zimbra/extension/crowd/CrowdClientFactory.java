@@ -27,7 +27,7 @@ import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.Provisioning;
 
-public class CrowdClient {
+public class CrowdClientFactory {
     // These are modeled after the crowd.properties file as described at
     // https://confluence.atlassian.com/crowd/the-crowd-properties-file-98665664.html
     private static final String LC_KEY_CROWD_SERVER_URL = "crowd_server_url";
