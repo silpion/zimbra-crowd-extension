@@ -23,6 +23,7 @@ import com.atlassian.crowd.search.query.entity.restriction.constants.UserTermKey
 
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Account;
+import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.Provisioning;
 
 public class CrowdAccount {
@@ -32,9 +33,28 @@ public class CrowdAccount {
     protected final RestCrowdClient client;
     
 
+
+    public CrowdAccount(Account account) throws Exception {
+        this(account, getClient(account));
+    }
+
     public CrowdAccount(Account account, List<String> args) throws Exception {
+        this(account, getClient(account, args));
+    }
+
+    private CrowdAccount(Account account, RestCrowdClient client) {
         this.account = account;
-        this.client = CrowdClientFactory.getClient(Provisioning.getInstance().getDomain(account), args);
+        this.client  = client;
+    }
+
+    private static RestCrowdClient getClient(Account account) throws Exception {
+        final Domain domain = Provisioning.getInstance().getDomain(account);
+        return CrowdClientFactory.getClient(domain);
+    }
+
+    private static RestCrowdClient getClient(Account account, List<String> args) throws Exception {
+        final Domain domain = Provisioning.getInstance().getDomain(account);
+        return CrowdClientFactory.getClient(domain, args);
     }
 
 

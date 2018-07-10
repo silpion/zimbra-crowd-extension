@@ -1,5 +1,7 @@
 package de.silpion.zimbra.extension.crowd;
 
+import java.util.Collections;
+
 /*-
  * #%L
  * Zimbra Crowd Authentication Extension
@@ -21,11 +23,14 @@ import com.atlassian.crowd.integration.rest.service.RestCrowdClient;
 import com.atlassian.crowd.integration.rest.service.factory.RestCrowdClientFactory;
 
 import com.zimbra.common.localconfig.LC;
+import com.zimbra.common.util.QuotedStringParser;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Domain;
 
 public class CrowdClientFactory {
+    private static final String AUTH_MECH_PREFIX = "custom:" + CrowdExtension.ID;
+    
     // These are modeled after the crowd.properties file as described at
     // https://confluence.atlassian.com/crowd/the-crowd-properties-file-98665664.html
     private static final String LC_KEY_CROWD_SERVER_URL = "crowd_server_url";
@@ -35,6 +40,16 @@ public class CrowdClientFactory {
     private static final RestCrowdClientFactory FACTORY = new RestCrowdClientFactory();
     private static final ConcurrentHashMap<String, RestCrowdClient> CLIENTS = new ConcurrentHashMap<>();
     
+
+    public static RestCrowdClient getClient(Domain domain) throws Exception {
+        final String config = domain.getAuthMech();
+        if (config == null || !config.startsWith(AUTH_MECH_PREFIX + " ")) {
+            return getClient(domain, null);
+        }
+
+        final QuotedStringParser parser = new QuotedStringParser(config.substring(AUTH_MECH_PREFIX.length() + 1));
+        return getClient(domain, parser.parse());
+    }
     
     public static RestCrowdClient getClient(Domain domain, List<String> args) throws Exception {
         final String key = domain.getId();
@@ -50,8 +65,14 @@ public class CrowdClientFactory {
         }
         return client;
     }
+
+    
     
     private static RestCrowdClient newInstance(List<String> args) {
+        if (args == null) {
+            args = Collections.emptyList();
+        }
+        
         final String url = getArg(args, 0, LC_KEY_CROWD_SERVER_URL);
         final String applicationName = getArg(args, 1, LC_KEY_CROWD_APPLICATION_NAME);
         final String applicationPassword = getArg(args, 2, LC_KEY_CROWD_APPLICATION_PASSWORD);
