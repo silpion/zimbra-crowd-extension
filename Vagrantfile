@@ -29,7 +29,7 @@ Vagrant.configure("2") do |multi|
       set -ex
       lsb_release -a
       cd /vagrant
-      PROVDIR=$PWD/#{PROVDIR}
+      PROVDIR=$PWD/#{PROVDIR}/zcs
       export DEBIAN_FRONTEND=noninteractive
       apt-get update
 
@@ -62,7 +62,7 @@ Vagrant.configure("2") do |multi|
     config.vm.hostname = "aux.zimbra.test"
     config.vm.network "private_network", ip: env["aux"]["ip4"]
 
-    config.vm.network "forwarded_port", guest: 6080, host: 6080
+    config.vm.network "forwarded_port", guest: 8095, host: 8095
 
     config.vm.provider "virtualbox" do |vb|
       vb.memory = env["aux"]["ram"]
@@ -72,13 +72,22 @@ Vagrant.configure("2") do |multi|
       set -ex
       lsb_release -a
       cd /vagrant
-      PROVDIR=$PWD/#{PROVDIR}
+      PROVDIR=$PWD/#{PROVDIR}/aux
       export DEBIAN_FRONTEND=noninteractive
       apt-get update
       
       apt-get install -y postfix
       postconf -e relayhost=#{env["zcs"]["ip4"]}
       postfix reload
+
+      apt-get install -y make curl
+
+      apt-get install -y openjdk-8-jdk-headless libtcnative-1
+
+      make -C $PROVDIR VERSION=#{env["aux"]["version"]}
+      test -f $PROVDIR/install.skip || make -C $PROVDIR VERSION=#{env["aux"]["version"]} install
+
+      /opt/crowd/start_crowd.sh
     end
   end
 end
