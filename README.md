@@ -8,8 +8,12 @@ Zimbra accounts against an installation of Atlassian Crowd.
 ### Prerequisites
 
 This project is built with Maven.  It also depends on some Zimbra libraries
-which aren't available via Maven Central.  The simples way to get hold of them
-is by copying them from an existing Zimbra server.
+which have to be placed in the `lib` directory since they aren't available
+via Maven Central.
+
+Just execute the script `lib.sh` to pull and extract them from the Zimbra
+repositories.  Alternatively you can copy them from an existing Zimbra
+server:
 
 ```
 rsync -rt -i zimbra.example.com:/opt/zimbra/lib/jars/ lib/  --include 'zimbra*.jar' --exclude '*.jar'
