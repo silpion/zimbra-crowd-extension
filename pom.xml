@@ -22,7 +22,7 @@
 
     <properties>
         <crowd.version>3.2.1</crowd.version>
-        <zimbra.version>8.7.11</zimbra.version>
+        <zimbra.version>8.8.11</zimbra.version>
 
         <zimbra.lib.dir>${basedir}/lib</zimbra.lib.dir>
         
