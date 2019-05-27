@@ -1,4 +1,4 @@
-package de.silpion.zimbra.extension.crowd;
+package de.silpion.zimbra.extension.crowd.client;
 
 /*-
  * #%L
@@ -25,6 +25,8 @@ import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.Provisioning;
+
+import de.silpion.zimbra.extension.crowd.CrowdExtension;
 
 public class CrowdAccount {
     private static final String PREFIX = CrowdExtension.ID + ":";

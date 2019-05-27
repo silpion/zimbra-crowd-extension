@@ -8,7 +8,7 @@ import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.ldap.ChangePasswordListener;
 
-import de.silpion.zimbra.extension.crowd.CrowdAccount;
+import de.silpion.zimbra.extension.crowd.client.CrowdAccount;
 
 public class CrowdChangePasswordListener extends ChangePasswordListener {
 

@@ -20,7 +20,7 @@ import java.util.Map;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.auth.ZimbraCustomAuth;
 
-import de.silpion.zimbra.extension.crowd.CrowdAccount;
+import de.silpion.zimbra.extension.crowd.client.CrowdAccount;
 
 public class CrowdAuthHandler extends ZimbraCustomAuth {
 

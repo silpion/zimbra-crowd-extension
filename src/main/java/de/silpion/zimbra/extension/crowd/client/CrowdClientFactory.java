@@ -1,4 +1,4 @@
-package de.silpion.zimbra.extension.crowd;
+package de.silpion.zimbra.extension.crowd.client;
 
 import java.util.Collections;
 
@@ -28,6 +28,8 @@ import com.zimbra.common.util.QuotedStringParser;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Domain;
+
+import de.silpion.zimbra.extension.crowd.CrowdExtension;
 
 public class CrowdClientFactory {
     private static final String AUTH_MECH_PREFIX = "custom:" + CrowdExtension.ID;
