@@ -48,13 +48,12 @@ public class CrowdAccount {
     }
 
     private static RestCrowdClient getClient(Account account) throws Exception {
-        final Domain domain = Provisioning.getInstance().getDomain(account);
-        return CrowdClientFactory.getClient(domain);
+        return getClient(account, null);
     }
 
     private static RestCrowdClient getClient(Account account, List<String> args) throws Exception {
         final Domain domain = Provisioning.getInstance().getDomain(account);
-        return CrowdClientFactory.getClient(domain, args);
+        return new CrowdClientFactory(domain, args).getClient();
     }
 
 

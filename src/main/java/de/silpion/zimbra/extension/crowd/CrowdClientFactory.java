@@ -17,6 +17,7 @@ import java.util.Collections;
 
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.atlassian.crowd.integration.rest.service.RestCrowdClient;
@@ -40,25 +41,27 @@ public class CrowdClientFactory {
     private static final RestCrowdClientFactory FACTORY = new RestCrowdClientFactory();
     private static final ConcurrentHashMap<String, RestCrowdClient> CLIENTS = new ConcurrentHashMap<>();
     
+    private final Domain domain;
+    private final List<String> args;
 
-    public static RestCrowdClient getClient(Domain domain) throws Exception {
-        final String config = domain.getAuthMech();
-        if (config == null || !config.startsWith(AUTH_MECH_PREFIX + " ")) {
-            return getClient(domain, null);
-        }
-
-        final QuotedStringParser parser = new QuotedStringParser(config.substring(AUTH_MECH_PREFIX.length() + 1));
-        return getClient(domain, parser.parse());
+    public CrowdClientFactory(Domain domain) {
+        this(domain, null);
     }
-    
-    public static RestCrowdClient getClient(Domain domain, List<String> args) throws Exception {
+
+    public CrowdClientFactory(Domain domain, List<String> args) {
+        this.domain = domain;
+        this.args = Optional.ofNullable(args).orElseGet(this::parseAuthMech);
+    }
+
+
+    public RestCrowdClient getClient() throws Exception {
         final String key = domain.getId();
-        RestCrowdClient client = CLIENTS.computeIfAbsent(key, id -> newInstance(args));
+        RestCrowdClient client = CLIENTS.computeIfAbsent(key, this::newInstance);
         try {
             client.testConnection();
         }
         catch (Exception e) {
-            ZimbraLog.extensions.error("Crowd client failed connection test, shutting down");
+            ZimbraLog.extensions.error("Crowd client for domain %s failed connection test, shutting down", key);
             CLIENTS.remove(key);
             client.shutdown();
             throw e;
@@ -66,22 +69,32 @@ public class CrowdClientFactory {
         return client;
     }
 
-    
-    
-    private static RestCrowdClient newInstance(List<String> args) {
-        if (args == null) {
-            args = Collections.emptyList();
-        }
-        
-        final String url = getArg(args, 0, LC_KEY_CROWD_SERVER_URL);
-        final String applicationName = getArg(args, 1, LC_KEY_CROWD_APPLICATION_NAME);
-        final String applicationPassword = getArg(args, 2, LC_KEY_CROWD_APPLICATION_PASSWORD);
 
-        ZimbraLog.extensions.info("Creating new Crowd client for application %s at URL %s", applicationName, url);
+    private List<String> parseAuthMech() {
+        final String config = domain.getAuthMech();
+        if (config == null || !config.startsWith(AUTH_MECH_PREFIX + " ")) {
+            return Collections.emptyList();
+        }
+
+        final QuotedStringParser parser = new QuotedStringParser(config.substring(AUTH_MECH_PREFIX.length() + 1));
+        return parser.parse();
+    }
+
+    
+    
+    private RestCrowdClient newInstance(String domain) {
+        final String url = getArg(0, LC_KEY_CROWD_SERVER_URL);
+        final String applicationName = getArg(1, LC_KEY_CROWD_APPLICATION_NAME);
+        final String applicationPassword = getArg(2, LC_KEY_CROWD_APPLICATION_PASSWORD);
+
+        ZimbraLog.extensions.info("Creating new Crowd client for domain %s using application %s at URL %s",
+                domain,
+                applicationName,
+                url);
         return (RestCrowdClient) FACTORY.newInstance(url, applicationName, applicationPassword);
     }
     
-    private static String getArg(List<String> args, int index, String key) {
+    private String getArg(int index, String key) {
         String value = "";
         
         if (args.size() >= index) {
