@@ -66,8 +66,8 @@ public class CrowdAccount {
     public void changePassword(String password) throws Exception {
         client.updateUserCredential(getPrincipal(), password);
     }
-    
-    
+
+
     private String getPrincipal() throws Exception {
         Optional<String> username;
         

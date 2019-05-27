@@ -21,7 +21,9 @@ public class CrowdChangePasswordListener extends ChangePasswordListener {
     public void preModify(Account account, String password, @SuppressWarnings("rawtypes") Map context, Map<String, Object> attributes) throws ServiceException {
         try {
             new CrowdAccount(account).changePassword(password);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
+            ZimbraLog.account.debug("Crowd: Password change failed: %s", e.getMessage(), e);
             throw AccountServiceException.CHANGE_PASSWORD();
         }
     }

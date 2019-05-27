@@ -17,6 +17,7 @@ package de.silpion.zimbra.extension.crowd.auth;
 import java.util.List;
 import java.util.Map;
 
+import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.auth.ZimbraCustomAuth;
 
@@ -30,6 +31,12 @@ public class CrowdAuthHandler extends ZimbraCustomAuth {
 
     @Override
     public void authenticate(Account account, String password, Map<String, Object> context, List<String> args) throws Exception {
-        new CrowdAccount(account, args).authenticate(password);
+        try {
+            new CrowdAccount(account, args).authenticate(password);
+        }
+        catch (Exception e) {
+            ZimbraLog.account.debug("Crowd: Authentication failed: %s", e.getMessage(), e);
+            throw e;
+        }
     }
 }
