@@ -23,7 +23,10 @@ $(TGZFILE):
 install: /opt/zimbra/conf/localconfig.done
 
 /opt/zimbra/conf/localconfig.done: /opt/zimbra/.install_history $(INSFILE).config
-	/opt/zimbra/libexec/zmsetup.pl -c $(INSFILE).config
+	/opt/zimbra/libexec/zmsetup.pl -c $(INSFILE).config || ( \
+        cat /tmp/zmsetup.log >&2; \
+        false; \
+    )
 	touch $@
 
 /opt/zimbra/.install_history: $(INSFILE) $(INSFILE).config
