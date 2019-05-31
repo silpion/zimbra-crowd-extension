@@ -52,17 +52,17 @@ sudo -i -u zimbra zmmailboxdctl restart
 
 To use the extension the following information is required:
 
-* The Crowd URL (eg. `https://crowd.example.net:8443`)
+* The Crowd URL (eg. `https://crowd.example.net:8443/crowd/`)
 * The Crowd Application Name (eg. `zimbra`)
-* The Crowd Application Password (eg `veeYaixa3oqu`)
+* The Crowd Application Password (eg `changeme`)
 
 These values have to be set in `/opt/zimbra/conf/localconfig.xml` (on all
 mailbox nodes).  Execute the following commands as user `zimbra`:
 
 ```
-zmlocalconfig -e crowd_server_url=https://crowd.example.net:8443
+zmlocalconfig -e crowd_server_url=https://crowd.example.net:8443/crowd/
 zmlocalconfig -e crowd_application_name=zimbra
-zmlocalconfig -e crowd_application_password=veeYaixa3oqu
+zmlocalconfig -e crowd_application_password=changeme
 zmmailboxdctl restart
 ```
 

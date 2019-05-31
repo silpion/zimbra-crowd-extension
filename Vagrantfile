@@ -63,6 +63,16 @@ Vagrant.configure("2") do |multi|
         fi
       done
       zmdo zmprov rlog
+
+      zmlocalconfig -e vagrant_crowd_server_url=http://192.0.2.23:8095/crowd/
+      zmlocalconfig -e vagrant_crowd_application_name=zimbra
+      zmlocalconfig -e vagrant_crowd_application_password=changeme
+      for key in server_url application_name application_password; do
+        if ! zmdo zmlocalconfig crowd_$key 2>/dev/null | grep -q =; then
+          zmdo zmlocalconfig -e crowd_$key=$(zmdo zmlocalconfig -s -m nokey vagrant_crowd_$key)
+        fi
+      done
+      zmdo zmmailboxdctl restart
     end
   end
 

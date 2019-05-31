@@ -1,0 +1,2 @@
+createDomain crowd.invalid zimbraAuthMech custom:crowd zimbraPasswordChangeListener crowd
+createAccount john.doe@crowd.invalid invalid gn John sn Doe displayName "John Doe" zimbraForeignPrincipal crowd:jdoe
