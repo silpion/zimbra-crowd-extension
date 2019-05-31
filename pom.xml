@@ -70,16 +70,15 @@
 
     <repositories>
         <repository>
-            <id>atlassian</id>
+            <id>atlassian-public</id>
             <name>Atlassian Public Repository</name>
-            <url>https://m2proxy.atlassian.com/repository/public</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
+            <url>https://packages.atlassian.com/mvn/maven-external/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
     </repositories>
 
