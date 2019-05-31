@@ -11,12 +11,15 @@ $(INSFILE): $(TGZFILE) $(TGZFILE).ok
 	tar xfz $<
 	touch $@
 
-$(TGZFILE).ok: $(TGZFILE).sha256 $(TGZFILE)
+$(TGZFILE).ok: $(TGZFILE).sha256
 	sha256sum -c $<
 	touch $@
 
+$(TGZFILE).sha256: $(TGZFILE)
+	sha256sum -b $< > $@
+
 $(TGZFILE):
-	xargs -n 1 curl -s -L -o $@.tmp < $(TGZFILE).url
+	xargs -n 1 curl -fsS -L -R -o $@.tmp < $(TGZFILE).url
 	mv $@.tmp $@
 
 
