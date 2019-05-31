@@ -80,7 +80,7 @@ public class CrowdClientFactory {
     private String getArg(int index, String key) {
         String value = "";
         
-        if (args.size() >= index) {
+        if (args.size() > index) {
             value = args.get(index);
         }
         if (!StringUtil.isNullOrEmpty(value)) {
