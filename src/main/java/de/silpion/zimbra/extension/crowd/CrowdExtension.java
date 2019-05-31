@@ -37,7 +37,7 @@ public class CrowdExtension implements ZimbraExtension {
         
         final String s = Provisioning.getInstance().getAllDomains().stream()
             .filter(d -> new CrowdAuthMech(d).isEnabled())
-            .map(Domain::getId)
+            .map(Domain::getName)
             .collect(Collectors.joining(", "));
         ZimbraLog.extensions.info("Crowd authentication enabled for domains: %s", s.isEmpty() ? "(none)" : s);
     }
