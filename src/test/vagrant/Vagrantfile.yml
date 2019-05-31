@@ -1,0 +1,15 @@
+# Copy this file next to the Vagrantfile and adapt it to your needs
+---
+zcs:
+  version: "8.8.11"
+  name: "zcs"
+  box: "ubuntu/trusty64"
+  ram: "4096"
+  ip4: "192.0.2.42"
+aux:
+  version: "3.4.0"
+  name: "aux"
+  box: "ubuntu/bionic64"
+  ram: "1024"
+  ip4: "192.0.2.23"
+

@@ -40,10 +40,12 @@ Vagrant.configure("2") do |multi|
 
       apt-get install -y libperl5.18 libaio1 unzip pax sysstat sqlite3
 
-      make -C $PROVDIR VERSION=#{env["zcs"]["version"]}
-      test -f $PROVDIR/install.skip || make -C $PROVDIR VERSION=#{env["zcs"]["version"]} install
-
       install -m 0755 $PROVDIR/zmdo /usr/local/bin/zmdo
+
+      make -C $PROVDIR VERSION=#{env["zcs"]["version"]}
+      if [ ! -f /opt/zimbra/conf/localconfig.xml -a ! -f $PROVDIR/install.skip ]; then
+        make -C $PROVDIR VERSION=#{env["zcs"]["version"]} install
+      fi
 
       zmdo zmprov -f $PROVDIR/setup.prov || true
 
