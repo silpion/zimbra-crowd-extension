@@ -53,6 +53,14 @@ Vagrant.configure("2") do |multi|
         zmdo zmlocalconfig -e postfix_lmtp_host_lookup=native
       fi
       zmdo zmmtactl restart
+
+      for category in extensions account; do
+        if ! grep -q -F "log4j.logger.zimbra.$category=" /opt/zimbra/conf/log4j.properties.in; then
+          echo log4j.logger.zimbra.$category=DEBUG | tee -a /opt/zimbra/conf/log4j.properties.in
+          echo log4j.logger.zimbra.$category=DEBUG | tee -a /opt/zimbra/conf/log4j.properties
+        fi
+      done
+      zmdo zmprov rlog
     end
   end
 
@@ -75,7 +83,7 @@ Vagrant.configure("2") do |multi|
       PROVDIR=$PWD/#{PROVDIR}/aux
       export DEBIAN_FRONTEND=noninteractive
       apt-get update
-      
+
       apt-get install -y postfix
       postconf -e relayhost=#{env["zcs"]["ip4"]}
       postfix reload
