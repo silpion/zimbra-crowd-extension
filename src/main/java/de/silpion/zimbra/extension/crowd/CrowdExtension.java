@@ -1,5 +1,4 @@
 package de.silpion.zimbra.extension.crowd;
-
 /*-
  * #%L
  * Zimbra Crowd Authentication Extension
@@ -11,15 +10,17 @@ package de.silpion.zimbra.extension.crowd;
  * #L%
  */
 
-
-
+import java.util.stream.Collectors;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.cs.account.Domain;
+import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.extension.ExtensionException;
 import com.zimbra.cs.extension.ZimbraExtension;
 
 import de.silpion.zimbra.extension.crowd.auth.CrowdAuthHandler;
+import de.silpion.zimbra.extension.crowd.auth.CrowdAuthMech;
 import de.silpion.zimbra.extension.crowd.pass.CrowdChangePasswordListener;
 
 public class CrowdExtension implements ZimbraExtension {
@@ -34,12 +35,14 @@ public class CrowdExtension implements ZimbraExtension {
         new CrowdAuthHandler().register(ID);
         new CrowdChangePasswordListener().register(ID);
         
-        ZimbraLog.extensions.info("Crowd extension initialized");
+        final String s = Provisioning.getInstance().getAllDomains().stream()
+            .filter(d -> new CrowdAuthMech(d).isEnabled())
+            .map(Domain::getId)
+            .collect(Collectors.joining(", "));
+        ZimbraLog.extensions.info("Crowd authentication enabled for domains: %s", s.isEmpty() ? "(none)" : s);
     }
-    
-    public void destroy() {
-        
-    }
-   
 
+    public void destroy() {
+        ZimbraLog.extensions.debug("Crowd extension destroyed");
+    }
 }

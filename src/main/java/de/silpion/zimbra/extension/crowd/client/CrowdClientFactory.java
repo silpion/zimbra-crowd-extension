@@ -1,7 +1,4 @@
 package de.silpion.zimbra.extension.crowd.client;
-
-import java.util.Collections;
-
 /*-
  * #%L
  * Zimbra Crowd Authentication Extension
@@ -13,9 +10,6 @@ import java.util.Collections;
  * #L%
  */
 
-
-
-
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,16 +18,14 @@ import com.atlassian.crowd.integration.rest.service.RestCrowdClient;
 import com.atlassian.crowd.integration.rest.service.factory.RestCrowdClientFactory;
 
 import com.zimbra.common.localconfig.LC;
-import com.zimbra.common.util.QuotedStringParser;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Domain;
 
-import de.silpion.zimbra.extension.crowd.CrowdExtension;
+import de.silpion.zimbra.extension.crowd.auth.CrowdAuthMech;
+
 
 public class CrowdClientFactory {
-    private static final String AUTH_MECH_PREFIX = "custom:" + CrowdExtension.ID;
-    
     // These are modeled after the crowd.properties file as described at
     // https://confluence.atlassian.com/crowd/the-crowd-properties-file-98665664.html
     private static final String LC_KEY_CROWD_SERVER_URL = "crowd_server_url";
@@ -52,7 +44,8 @@ public class CrowdClientFactory {
 
     public CrowdClientFactory(Domain domain, List<String> args) {
         this.domain = domain;
-        this.args = Optional.ofNullable(args).orElseGet(this::parseAuthMech);
+        this.args = Optional.ofNullable(args)
+                .orElseGet(() -> new CrowdAuthMech(domain).getArgs());
     }
 
 
@@ -70,18 +63,6 @@ public class CrowdClientFactory {
         }
         return client;
     }
-
-
-    private List<String> parseAuthMech() {
-        final String config = domain.getAuthMech();
-        if (config == null || !config.startsWith(AUTH_MECH_PREFIX + " ")) {
-            return Collections.emptyList();
-        }
-
-        final QuotedStringParser parser = new QuotedStringParser(config.substring(AUTH_MECH_PREFIX.length() + 1));
-        return parser.parse();
-    }
-
     
     
     private RestCrowdClient newInstance(String domain) {
