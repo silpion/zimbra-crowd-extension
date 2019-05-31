@@ -1,6 +1,7 @@
 The latest Zimbra version can be downloaded here:
 
-https://www.zimbra.com/downloads/zimbra-collaboration-open-source-for-customers-partners/
+* https://www.zimbra.com/downloads/zimbra-collaboration-open-source-for-customers-partners/
+* https://www.zimbra.com/downloads/zimbra-collaboration-open-source/archives/
 
 
 To bump the version, follow these steps:
