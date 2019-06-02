@@ -1,4 +1,0 @@
-Copyright 2018 Silpion IT-Solutions GmbH <https://www.silpion.de>
-
-This project contains proprietary code and must not be copied or distributed
-without the express permission of the copyright holder.

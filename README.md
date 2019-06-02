@@ -87,4 +87,23 @@ zmprov modifyAccount john.doe@example.com +zimbraForeignPrincipal crowd:jdoe
 
 ## License
 
-This project is currently *not* under an Open Source license.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may find a copy of the License in the file LICENSE or at
+
+https://opensource.org/licenses/Apache-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+
+## Acknowledgement
+
+This extension was created by the joint effort of [Silpion](https://www.silpion.de/),
+a Zimbra Gold Partner, and [iVentureGroup](https://www.iventuregroup.com/).
+We are both located in Hamburg with subsidaries all over Germany.  If you
+like to code on varying projects in a friendly atmosphere or have a knack for
+running software at large scale, check out the job offerings on our websites.

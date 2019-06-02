@@ -2,9 +2,6 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <prerequisites>
-        <maven>3.0.4</maven>
-    </prerequisites>
 
     <groupId>de.silpion.zimbra.extension.crowd</groupId>
     <artifactId>zimbra-crowd-extension</artifactId>
@@ -12,8 +9,14 @@
     <version>1.0.0-SNAPSHOT</version>
 
     <name>Zimbra Crowd Authentication Extension</name>
-    <description></description>
+    <description>Zimbra extension which allows authentication against Atlassian Crowd</description>
     <inceptionYear>2018</inceptionYear>
+    <licenses>
+        <license>
+            <name>Apache-2.0</name>
+            <url>https://opensource.org/licenses/Apache-2.0</url>
+        </license>
+    </licenses>
 
     <organization>
         <name>Silpion IT-Solutions GmbH</name>
@@ -25,7 +28,7 @@
         <zimbra.version>8.8.11</zimbra.version>
 
         <zimbra.lib.dir>${basedir}/lib</zimbra.lib.dir>
-        
+
         <wagon.server>zimbra.example.com</wagon.server>
         <wagon.url>scp://zimbra@${wagon.server}/opt/zimbra/lib/ext/crowd/</wagon.url>
 
@@ -123,7 +126,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.1.1</version>
                 <configuration>
                     <descriptorRefs>
                       <descriptorRef>bin</descriptorRef>
@@ -139,24 +142,6 @@
                         <phase>package</phase>
                         <goals>
                             <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <version>1.16</version>
-                <configuration>
-                    <licenseName>silpion</licenseName>
-                    <licenseResolver>${project.baseUri}/src/license</licenseResolver>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>check</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>check-file-header</goal>
                         </goals>
                     </execution>
                 </executions>
