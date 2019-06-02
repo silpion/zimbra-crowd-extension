@@ -23,6 +23,12 @@
         <url>https://www.silpion.de</url>
     </organization>
 
+    <scm>
+        <url>https://github.com/silpion/zimbra-crowd-extension</url>
+        <connection>scm:git:https://github.com/silpion/zimbra-crowd-extension.git</connection>
+        <developerConnection>scm:git:git@github.com:silpion/zimbra-crowd-extension.git</developerConnection>
+    </scm>
+
     <properties>
         <crowd.version>3.4.5</crowd.version>
         <zimbra.version>8.8.11</zimbra.version>
