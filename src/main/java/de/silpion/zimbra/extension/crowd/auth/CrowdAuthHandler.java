@@ -18,6 +18,7 @@ package de.silpion.zimbra.extension.crowd.auth;
 import java.util.List;
 import java.util.Map;
 
+import com.atlassian.crowd.exception.CrowdException;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.auth.ZimbraCustomAuth;
@@ -35,8 +36,12 @@ public class CrowdAuthHandler extends ZimbraCustomAuth {
         try {
             new CrowdAccount(account, args).authenticate(password);
         }
-        catch (Exception e) {
+        catch (CrowdException e) {
             ZimbraLog.account.debug("Crowd: Authentication failed: %s", e.getMessage(), e);
+            throw e;
+        }
+        catch (Exception e) {
+            ZimbraLog.account.error("Crowd: Unexpected %s: %s", e.getClass().getName(), e.getMessage(), e);
             throw e;
         }
     }

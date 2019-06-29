@@ -4,32 +4,6 @@ This Zimbra extensions implements a custom auth handler which authenticates
 Zimbra accounts against an installation of Atlassian Crowd.
 
 
-## Getting Started
-
-### Prerequisites
-
-This project depends on some Zimbra libraries which have to be placed in
-the `lib` directory since they aren't available via Maven Central.
-
-Just execute the script `lib.sh` to pull and extract them from the Zimbra
-repositories.  Alternatively you can copy them from an existing Zimbra
-server:
-
-```
-rsync -rt -i --delete zimbra.example.com:/opt/zimbra/lib/jars/ lib/  --include 'zimbra*.jar' --exclude '*.jar'
-```
-
-### Compilation
-
-This project is built with Maven.  Just execute the following command:
-
-```
-mvn package
-```
-
-This will create a bundle `target/zimbra-crowd-extension.zip` which contains
-the extension plus all the required libraries.
-
 
 ## Installation
 
@@ -83,6 +57,33 @@ Crowd username to authenticate against explicitly for each Zimbra account:
 ```
 zmprov modifyAccount john.doe@example.com +zimbraForeignPrincipal crowd:jdoe
 ```
+
+
+## Development
+
+### Prerequisites
+
+This project depends on some Zimbra libraries which have to be placed in
+the `lib` directory since they aren't available via Maven Central.
+
+Just execute the script `lib.sh` to pull and extract them from the Zimbra
+repositories.  Alternatively you can copy them from an existing Zimbra
+server:
+
+```
+rsync -rt -i --delete zimbra.example.com:/opt/zimbra/lib/jars/ lib/  --include 'zimbra*.jar' --exclude '*.jar'
+```
+
+### Compilation
+
+This project is built with Maven.  Just execute the following command:
+
+```
+mvn package
+```
+
+This will create a bundle `target/zimbra-crowd-extension.zip` which contains
+the extension plus all the required libraries.
 
 
 ## License

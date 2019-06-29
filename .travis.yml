@@ -11,3 +11,8 @@ before_install:
     - "ls -1 zimbra-common-core-jar_*_amd64.deb | xargs -t sudo dpkg --install --ignore-depends=zimbra-core-components"
     - "sudo sed -i -e '/^Depends: zimbra-core-components/d' /var/lib/dpkg/status"
     - "rsync -rt -i /opt/zimbra/lib/jars/ lib/"
+
+cache:
+    directories:
+        - $HOME/.m2/
+        - lib/

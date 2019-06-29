@@ -17,6 +17,7 @@ package de.silpion.zimbra.extension.crowd.pass;
 
 import java.util.Map;
 
+import com.atlassian.crowd.exception.CrowdException;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Account;
@@ -37,8 +38,12 @@ public class CrowdChangePasswordListener extends ChangePasswordListener {
         try {
             new CrowdAccount(account).changePassword(password);
         }
-        catch (Exception e) {
+        catch (CrowdException e) {
             ZimbraLog.account.debug("Crowd: Password change failed: %s", e.getMessage(), e);
+            throw AccountServiceException.CHANGE_PASSWORD();
+        }
+        catch (Exception e) {
+            ZimbraLog.account.error("Crowd: Unexpected %s: %s", e.getClass().getName(), e.getMessage(), e);
             throw AccountServiceException.CHANGE_PASSWORD();
         }
     }
