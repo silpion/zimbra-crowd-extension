@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.zimbra.common.util.QuotedStringParser;
+import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Domain;
 
 import de.silpion.zimbra.extension.crowd.CrowdExtension;
@@ -33,20 +34,31 @@ public class CrowdAuthMech {
 
     public CrowdAuthMech(Domain domain) {
         config = Optional.ofNullable(domain.getAuthMech()).orElse("");
+        if (hasArgs()) {
+            ZimbraLog.extensions.warn("Crowd: Domain %s has configuration arguments. This API is not stable yet and the format of the arguments will probably change in a future release", domain.getName());
+        }
     }
     
     public boolean isEnabled() {
+        if (!config.startsWith(AUTH_MECH_PREFIX)) {
+            return false;
+        }
         final int l = AUTH_MECH_PREFIX.length();
-        return config.startsWith(AUTH_MECH_PREFIX) &&
-                ((config.length() == l) || config.substring(l, l + 1).equals(SPACE));
+        return config.length() == l || config.substring(l, l + 1).equals(SPACE);
     }
     
     public List<String> getArgs() {
-        final int l = AUTH_MECH_PREFIX.length();
-        if (!isEnabled() || config.length() == l) {
+        if (!hasArgs()) {
             return Collections.emptyList();
         }
-        final QuotedStringParser parser = new QuotedStringParser(config.substring(l + SPACE.length()));
-        return parser.parse();
+        return parseArgString(config.substring(AUTH_MECH_PREFIX.length() + SPACE.length()));
+    }
+
+    private boolean hasArgs() {
+        return isEnabled() && config.length() > AUTH_MECH_PREFIX.length();
+    }
+
+    private static List<String> parseArgString(String args) {
+        return new QuotedStringParser(args).parse();
     }
 }
