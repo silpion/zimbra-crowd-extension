@@ -86,6 +86,21 @@ This will create a bundle `target/zimbra-crowd-extension.zip` which contains
 the extension plus all the required libraries.
 
 
+### Release
+
+All development should be done on feature branches.  They must be merged to
+`develop` first.  Once the current state of `develop` is ready for release,
+use the following command to merge to `master` and release:
+
+```
+mvn clean package
+mvn gitflow:release
+```
+
+Afterwards draft a new GitHub release from the tag and attach the file
+`target/zimbra-crowd-extension.zip`.
+
+
 ## License
 
 Licensed under the Apache License, Version 2.0 (the "License");
