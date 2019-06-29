@@ -61,6 +61,20 @@ zmprov modifyAccount john.doe@example.com +zimbraForeignPrincipal crowd:jdoe
 
 ## Development
 
+### Interfaces
+
+This Zimbra extension implements the Zimbra APIs documented here:
+
+* https://github.com/Zimbra/zm-mailbox/blob/8.8.12/store/docs/extensions.md
+* https://github.com/Zimbra/zm-mailbox/blob/8.8.12/store/docs/customauth.txt
+* https://github.com/Zimbra/zm-mailbox/blob/8.8.12/store/docs/changepasswordlistener.txt
+
+It uses the Atlassian Crowd Java Integration Libraries which are documented
+here:
+
+* https://docs.atlassian.com/atlassian-crowd/3.4.5/index.html?com/atlassian/crowd/integration/rest/service/RestCrowdClient.html
+* https://developer.atlassian.com/server/crowd/creating-a-crowd-client-using-crowd-integration-libraries/
+
 ### Prerequisites
 
 This project depends on some Zimbra libraries which have to be placed in
