@@ -27,6 +27,7 @@ import com.zimbra.cs.extension.ZimbraExtension;
 
 import de.silpion.zimbra.extension.crowd.auth.CrowdAuthHandler;
 import de.silpion.zimbra.extension.crowd.auth.CrowdAuthMech;
+import de.silpion.zimbra.extension.crowd.client.CrowdClientFactory;
 import de.silpion.zimbra.extension.crowd.pass.CrowdChangePasswordListener;
 
 public class CrowdExtension implements ZimbraExtension {
@@ -49,6 +50,7 @@ public class CrowdExtension implements ZimbraExtension {
     }
 
     public void destroy() {
+        CrowdClientFactory.shutdown();
         ZimbraLog.extensions.debug("Crowd extension destroyed");
     }
 }

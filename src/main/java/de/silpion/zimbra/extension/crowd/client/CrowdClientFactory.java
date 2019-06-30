@@ -17,6 +17,7 @@
 package de.silpion.zimbra.extension.crowd.client;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -52,6 +53,17 @@ public class CrowdClientFactory {
         this.domain = domain;
         this.args = Optional.ofNullable(args)
                 .orElseGet(() -> new CrowdAuthMech(domain).getArgs());
+    }
+
+    public static void shutdown() {
+        for (Map.Entry<String, RestCrowdClient> client : CLIENTS.entrySet()) {
+            try {
+                client.getValue().shutdown();
+            }
+            catch (Exception e) {
+                ZimbraLog.extensions.debug("Crowd: Failed to shut down client %s: %s", client.getKey(), e.getMessage(), e);
+            }
+        }
     }
 
 
