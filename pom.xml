@@ -31,7 +31,7 @@
 
     <properties>
         <crowd.version>3.4.5</crowd.version>
-        <zimbra.version>8.8.11</zimbra.version>
+        <zimbra.version>8.8.12</zimbra.version>
 
         <zimbra.lib.dir>${basedir}/lib</zimbra.lib.dir>
 

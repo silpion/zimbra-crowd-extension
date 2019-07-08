@@ -1,7 +1,7 @@
 # Copy this file next to the Vagrantfile and adapt it to your needs
 ---
 zcs:
-  version: "8.8.11"
+  version: "8.8.12"
   name: "zcs"
   box: "ubuntu/trusty64"
   ram: "4096"
