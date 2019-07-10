@@ -153,7 +153,7 @@ To start the environment, just do a
 vagrant up
 ```
 
-The first start might take a while since the installation files for both VMs
+The first start will take a while since the installation files for both VMs
 are downloaded and the environment is installed.  Once everything is up, the
 following services are available locally:
 
@@ -162,6 +162,31 @@ following services are available locally:
 * [Zimbra Admin UI (HTTPS)](https://127.0.0.1:7071/)
 * [Crowd Web & Admin UI](http://127.0.0.1:8095/)
 
+The administrative user for the Zimbra installation is called
+`admin@zimbra.invalid` and has the password `changeme`.
+
+The Zimbra setup has an additional preconfigured domain `crowd.invalid` which
+will authenticate against the Crowd installation.  It will use the application
+name `zimbra` and the password `changeme`.  The domain contains a single user
+named `john.doe` which is explicitly mapped to the Crowd user `jdoe`.  To test
+the authentication try to log in as the user `john.doe@crowd.invalid` with the
+password which is set for the Crowd user `jdoe`.
+
+The Crowd setup currently has to be finished manually.
+
+Since the provisioning of the Vagrant VMs takes such a long time it is
+recommended not to destroy the machines but to do a clean shutdown via
+
+```
+vagrant halt
+```
+
+To (re-)deploy the extension you can call the Vagrant provisioning again via
+a command line like
+
+```
+mvn package && vagrant provision zcs
+```
 
 
 ### Release

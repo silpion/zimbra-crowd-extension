@@ -72,7 +72,13 @@ Vagrant.configure("2") do |multi|
           zmdo zmlocalconfig -e crowd_$key=$(zmdo zmlocalconfig -s -m nokey vagrant_crowd_$key)
         fi
       done
-      zmdo zmmailboxdctl restart
+
+      if [ /vagrant/target/zimbra-crowd-extension.jar -nt /opt/zimbra/lib/ext/crowd/zimbra-crowd-extension.jar ]; then
+        install -d /opt/zimbra/lib/ext/crowd/
+        rm -f /opt/zimbra/lib/ext/crowd/*.jar
+        cp -a /vagrant/target/*.jar /opt/zimbra/lib/ext/crowd/
+        zmdo zmmailboxdctl restart
+      fi
     end
   end
 
