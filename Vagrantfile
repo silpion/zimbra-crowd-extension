@@ -60,18 +60,13 @@ Vagrant.configure("2") do |multi|
         if ! grep -q -F "log4j.logger.zimbra.$category=" /opt/zimbra/conf/log4j.properties.in; then
           echo log4j.logger.zimbra.$category=DEBUG | tee -a /opt/zimbra/conf/log4j.properties.in
           echo log4j.logger.zimbra.$category=DEBUG | tee -a /opt/zimbra/conf/log4j.properties
+          zmdo zmprov rlog
         fi
       done
-      zmdo zmprov rlog
 
-      zmdo zmlocalconfig -e vagrant_crowd_server_url=http://192.0.2.23:8095/crowd/
-      zmdo zmlocalconfig -e vagrant_crowd_application_name=zimbra
-      zmdo zmlocalconfig -e vagrant_crowd_application_password=changeme
-      for key in server_url application_name application_password; do
-        if ! zmdo zmlocalconfig crowd_$key 2>/dev/null | grep -q =; then
-          zmdo zmlocalconfig -e crowd_$key=$(zmdo zmlocalconfig -s -m nokey vagrant_crowd_$key)
-        fi
-      done
+      if [ ! -f /opt/zimbra/conf/crowd.properties.skip ]; then
+        install $PROVDIR/crowd.properties /opt/zimbra/conf/crowd.properties
+      fi
 
       if [ /vagrant/target/zimbra-crowd-extension.jar -nt /opt/zimbra/lib/ext/crowd/zimbra-crowd-extension.jar ]; then
         install -d /opt/zimbra/lib/ext/crowd/

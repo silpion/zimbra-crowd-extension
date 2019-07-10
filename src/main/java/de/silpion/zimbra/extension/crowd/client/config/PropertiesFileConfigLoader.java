@@ -15,6 +15,7 @@
  *******************************************************************************/
 package de.silpion.zimbra.extension.crowd.client.config;
 
+import java.nio.file.Paths;
 import java.util.Properties;
 
 import com.atlassian.crowd.integration.Constants;
@@ -23,10 +24,16 @@ import com.atlassian.crowd.service.client.ClientResourceLocator;
 import com.zimbra.common.localconfig.LC;
 
 public abstract class PropertiesFileConfigLoader extends ClientResourceLocator {
-    private static final String ZIMBRA_CONF_DIR = LC.zimbra_home + "/conf";
+    private static final String ZIMBRA_CONF_DIR = Paths.get(LC.zimbra_home.value(), "conf").toString();
+    private static final boolean SKIP_VALIDATION = Boolean.getBoolean(Constants.PROPERTIES_FILE + ".skip.validation");
 
     public PropertiesFileConfigLoader() {
         super(Constants.PROPERTIES_FILE, ZIMBRA_CONF_DIR);
+    }
+
+    @Override
+    protected String formatFileLocation(String fileLocation, boolean skipValidation) {
+        return super.formatFileLocation(fileLocation, skipValidation || SKIP_VALIDATION);
     }
 
     @Override
@@ -34,6 +41,10 @@ public abstract class PropertiesFileConfigLoader extends ClientResourceLocator {
         if (getResourceLocation() == null) {
             return new Properties();
         }
-        return super.getProperties();
+        final Properties properties = super.getProperties();
+        if (properties == null) {
+            return new Properties();
+        }
+        return properties;
     }
 }
