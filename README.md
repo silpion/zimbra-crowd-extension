@@ -21,17 +21,58 @@ rsync -rt -i --delete zimbra-crowd-extension/ /opt/zimbra/lib/ext/crowd/
 sudo -i -u zimbra zmmailboxdctl restart
 ```
 
+If the extension was installed and loaded properly, the file
+`/opt/zimbra/log/mailbox.log` should contain an entry along the lines of
+
+```
+extensions - Crowd authentication enabled for domains: (none)
+```
+
 
 ## Configuration
 
-To use the extension the following information is required:
+To authenticate against Crowd it has to be enabled once per domain by setting
+the value of the attribute `zimbraAuthMech` to `custom:crowd`.
 
-* The Crowd URL (eg. `https://crowd.example.net:8443/crowd/`)
-* The Crowd Application Name (eg. `zimbra`)
-* The Crowd Application Password (eg `changeme`)
+If users should be able to change their password via the Zimbra Web UI (which
+is recommended) the value of the attribute `zimbraPasswordChangeListener` has
+to be set to the value `crowd`.
 
-These values have to be set in `/opt/zimbra/conf/localconfig.xml` (on all
-mailbox nodes).  Execute the following commands as user `zimbra`:
+```
+zmprov modifyDomain example.com zimbraAuthMech custom:crowd
+zmprov modifyDomain example.com zimbraPasswordChangeListener crowd
+zmmailboxdctl restart
+```
+
+While this will enable the integration with Crowd, the extension requires some
+additional information to contact the server.  The built-in client has to be
+configured via the attributes described in the [Crowd Documentation](https://confluence.atlassian.com/crowd/the-crowd-properties-file-98665664.html).
+
+The following minimal information is required:
+
+* The Crowd Server URL aka `crowd.server.url` (eg. `https://crowd.example.net:8443/crowd/`)
+* The Crowd Application Name aka `application.name` (eg. `zimbra`)
+* The Crowd Application Password aka `application.password` (eg `changeme`)
+
+These settings loaded from the following places:
+
+1. An optional `crowd.properties` file. The default location of this file is
+   `/opt/zimbra/conf/crowd.properties` but it can be overridden by setting
+   the system property `crowd.properties` via the `localconfig.xml` key
+   `mailboxd_java_options`.
+
+2. These values provied by the properties file can be overridden via dedicated
+   options in `/opt/zimbra/conf/localconfig.xml`.  These are modelled after
+   the properties with all dots replaced by underscores and the prefix
+   `crowd_` prepended unless the attribute already starts with this string.
+
+3. Finally the options can be overridden per domain by providing optional
+   arguments to the authentication mechanism set via the `zimbraAuthMech`
+   domain attribute.  These arguments are seperated by whitespace and can be
+   quoted if required.  Just use the same key names as in the `localconfig.xml`
+   file.
+
+The recommended way is to set the values via `localconfig.xml`:
 
 ```
 zmlocalconfig -e crowd_server_url=https://crowd.example.net:8443/crowd/
@@ -40,19 +81,20 @@ zmlocalconfig -e crowd_application_password=changeme
 zmmailboxdctl restart
 ```
 
-To use authentication against Crowd it has to be enabled once per domain:
+And override them per domain if required:
 
 ```
-zmprov modifyDomain example.com zimbraAuthMech custom:crowd
-zmprov modifyDomain example.com zimbraPasswordChangeListener crowd
-zmprov flushCache -a domain
+zmprov modifyDomain example.org zimbraAuthMech 'custom:crowd crowd_application_name=zimbra2 "crowd_application_password=change me"'
+zmmailboxdctl restart
 ```
 
 The authenticator will now try to authenticate against the given Crowd setup.
 Per default accounts are mapped by email address, ie. for each login a search
-against the Crowd directory is performed.  This can result in more than one
-account which will cause an error.  Due to this it is recommended to set the
-Crowd username to authenticate against explicitly for each Zimbra account:
+against the Crowd directory is performed.  This has some performance impact
+and can result in more than one result which will cause an authentication
+error.  Due to this it is recommended to set the Crowd username to
+authenticate against explicitly for each Zimbra account via the
+`zimbraForeignPrincipal` account attribute and the `crowd:` prefix:
 
 ```
 zmprov modifyAccount john.doe@example.com +zimbraForeignPrincipal crowd:jdoe
@@ -98,6 +140,28 @@ mvn package
 
 This will create a bundle `target/zimbra-crowd-extension.zip` which contains
 the extension plus all the required libraries.
+
+### Testing
+
+The project provides a [Vagrant](https://www.vagrantup.com/) environment
+with two virtual machines:  One Zimbra VM called `zcs` and another for
+Atlassian Crowd called `aux`.
+
+To start the environment, just do a
+
+```
+vagrant up
+```
+
+The first start might take a while since the installation files for both VMs
+are downloaded and the environment is installed.  Once everything is up, the
+following services are available locally:
+
+* [Zimbra Web UI (HTTP)](http://127.0.0.1:7080/)
+* [Zimbra Web UI (HTTPS)](https://127.0.0.1:7443/)
+* [Zimbra Admin UI (HTTPS)](https://127.0.0.1:7071/)
+* [Crowd Web & Admin UI](http://127.0.0.1:8095/)
+
 
 
 ### Release

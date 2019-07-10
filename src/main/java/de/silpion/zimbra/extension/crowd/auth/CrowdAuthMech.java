@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.zimbra.common.util.QuotedStringParser;
-import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Domain;
 
 import de.silpion.zimbra.extension.crowd.CrowdExtension;
@@ -34,9 +33,6 @@ public class CrowdAuthMech {
 
     public CrowdAuthMech(Domain domain) {
         config = Optional.ofNullable(domain.getAuthMech()).orElse("");
-        if (hasArgs()) {
-            ZimbraLog.extensions.warn("Crowd: Domain %s has configuration arguments. This API is not stable yet and the format of the arguments will probably change in a future release", domain.getName());
-        }
     }
     
     public boolean isEnabled() {
