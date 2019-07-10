@@ -108,7 +108,10 @@ Vagrant.configure("2") do |multi|
       make -C $PROVDIR VERSION=#{env["aux"]["version"]}
       test -f $PROVDIR/install.skip || make -C $PROVDIR VERSION=#{env["aux"]["version"]} install
 
-      /opt/crowd/start_crowd.sh
+      install $PROVDIR/crowd.service /etc/systemd/system/
+      systemctl daemon-reload
+      systemctl enable crowd.service
+      systemctl start crowd.service
     end
   end
 end

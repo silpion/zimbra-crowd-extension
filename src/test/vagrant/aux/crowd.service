@@ -1,0 +1,9 @@
+[Unit]
+Description=Atlassian Crowd
+After=network.target
+
+[Service]
+ExecStart=/opt/crowd/start_crowd.sh -fg
+
+[Install]
+WantedBy=multi-user.target
