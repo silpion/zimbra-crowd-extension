@@ -160,7 +160,7 @@ following services are available locally:
 * [Zimbra Web UI (HTTP)](http://127.0.0.1:7080/)
 * [Zimbra Web UI (HTTPS)](https://127.0.0.1:7443/)
 * [Zimbra Admin UI (HTTPS)](https://127.0.0.1:7071/)
-* [Crowd Web & Admin UI](http://127.0.0.1:8095/)
+* [Crowd Console (HTTP)](http://127.0.0.1:8095/crowd/console/)
 
 The administrative user for the Zimbra installation is called
 `admin@zimbra.invalid` and has the password `changeme`.
@@ -172,10 +172,33 @@ named `john.doe` which is explicitly mapped to the Crowd user `jdoe`.  To test
 the authentication try to log in as the user `john.doe@crowd.invalid` with the
 password which is set for the Crowd user `jdoe`.
 
-The Crowd setup currently has to be finished manually.
+The Crowd setup currently has to be finished manually.  To do so, just go to
+the [Crowd Console](http://127.0.0.1:8095/crowd/console/) and enter your
+(evaluation) license key.  Afterwards choose the following steps:
 
-Since the provisioning of the Vagrant VMs takes such a long time it is
-recommended not to destroy the machines but to do a clean shutdown via
+1. New Installation
+2. Embedded database
+3. Verify the Base URL
+4. Create an Internal Directory with all the default settings
+5. Create a Default Administrator `admin` with the Email Address
+   `admin@zimbra.invalid`
+6. Do not enable any Integrated Applications
+7. Log in as the previously created `admin` user
+8. [Configure a mail server](http://127.0.0.1:8095/crowd/console/secure/admin/mailserver!execute.action)
+   at `127.0.0.1` using the address `admin@zimbra.invalid`
+9. [Create an application](http://127.0.0.1:8095/crowd/console/secure/application/addapplicationdetails.action)
+   of type Generic Application named `zimbra` and using the password
+   `changeme`
+10. Set the application URL to `http://zcs.zimbra.test` and the Remote IP
+    Address to `192.0.2.42`
+11. Choose the previously created Internal Directory
+12. Allow all users to authenticate
+13. [Create a user](http://127.0.0.1:8095/crowd/console/secure/user/add.action)
+    named `jdoe` with the Email Address `john.doe@crowd.invalid`
+
+Since the provisioning of the Vagrant VMs takes such a long time and the
+license is tied to the Crowd server id, it is recommended not to destroy the
+machines but to do a clean shutdown via
 
 ```
 vagrant halt
