@@ -4,13 +4,7 @@ jdk:
 
 dist: trusty
 before_install:
-    - "sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 5234D2B73B6996C7"
-    - "echo 'deb [arch=amd64] https://repo.zimbra.com/apt/8811 trusty zimbra' | sudo tee /etc/apt/sources.list.d/zimbra.list"
-    - "sudo apt-get update -qq"
-    - "apt-get download zimbra-common-core-jar"
-    - "ls -1 zimbra-common-core-jar_*_amd64.deb | xargs -t sudo dpkg --install --ignore-depends=zimbra-core-components"
-    - "sudo sed -i -e '/^Depends: zimbra-core-components/d' /var/lib/dpkg/status"
-    - "rsync -rt -i /opt/zimbra/lib/jars/ lib/"
+    - "bash -x lib.sh"
 
 cache:
     directories:
