@@ -4,7 +4,7 @@ jdk:
 
 dist: trusty
 before_install:
-    - "bash -x lib.sh"
+    - "bash lib.sh"
 
 cache:
     directories:

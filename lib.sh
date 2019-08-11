@@ -45,6 +45,7 @@ curl -s "$baseurl/dists/$DIST/zimbra/binary-amd64/Packages" | while read key val
     item=()
 done
 
+rm -f package.sha256
 sort -V package.list | tail -n 1 | while read version file path sha256; do
     echo "$sha256 *$file" > package.sha256
     xargs -n 1 curl -L -o "$file.part" <<< "$baseurl/$path/$file"
@@ -52,12 +53,33 @@ sort -V package.list | tail -n 1 | while read version file path sha256; do
     sha256sum -c package.sha256 >/dev/null
 done
 
+if [[ -s package.sha256 ]]; then
+    deb=$(cut -d '*' -f 2 package.sha256)
+else
+    case $DIST in
+        trusty)
+            v=14
+            ;;
+        xenial)
+            v=16
+            ;;
+        bionic)
+            v=18
+            ;;
+        *)
+            false
+            ;;
+    esac
+    make -C "$basedir/src/test/vagrant/zcs" VERSION=${version}
+    deb=$(ls -1 $basedir/src/test/vagrant/zcs/zcs-${version}_GA_*.UBUNTU${v}_64.*/packages/${package}_${version}.*.u${v}_amd64.deb | head -n 1)
+fi
+ar x "$deb"
+
 if [[ -d opt ]]; then
     rm -r opt
 fi
-
-ar x $(cut -d '*' -f 2 package.sha256)
 tar tfa data.tar.xz | grep /opt/zimbra/lib/jars/zimbra | xargs tar xfa data.tar.xz
 
 chmod +w opt/zimbra/lib/jars/*.jar
+rm -f $basedir/lib/*.jar
 mv opt/zimbra/lib/jars/*.jar "$basedir/lib"
