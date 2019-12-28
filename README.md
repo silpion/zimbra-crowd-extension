@@ -107,9 +107,9 @@ zmprov modifyAccount john.doe@example.com +zimbraForeignPrincipal crowd:jdoe
 
 This Zimbra extension implements the Zimbra APIs documented here:
 
-* https://github.com/Zimbra/zm-mailbox/blob/8.8.12/store/docs/extensions.md
-* https://github.com/Zimbra/zm-mailbox/blob/8.8.12/store/docs/customauth.txt
-* https://github.com/Zimbra/zm-mailbox/blob/8.8.12/store/docs/changepasswordlistener.txt
+* https://github.com/Zimbra/zm-mailbox/blob/8.8.15/store/docs/extensions.md
+* https://github.com/Zimbra/zm-mailbox/blob/8.8.15/store/docs/customauth.txt
+* https://github.com/Zimbra/zm-mailbox/blob/8.8.15/store/docs/changepasswordlistener.txt
 
 It uses the Atlassian Crowd Java Integration Libraries which are documented
 here:
