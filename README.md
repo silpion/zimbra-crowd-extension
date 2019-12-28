@@ -114,7 +114,7 @@ This Zimbra extension implements the Zimbra APIs documented here:
 It uses the Atlassian Crowd Java Integration Libraries which are documented
 here:
 
-* https://docs.atlassian.com/atlassian-crowd/3.4.5/index.html?com/atlassian/crowd/integration/rest/service/RestCrowdClient.html
+* https://docs.atlassian.com/atlassian-crowd/3.4.6/index.html?com/atlassian/crowd/integration/rest/service/RestCrowdClient.html
 * https://developer.atlassian.com/server/crowd/creating-a-crowd-client-using-crowd-integration-libraries/
 
 ### Prerequisites
